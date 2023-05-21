@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width-devicce-width, initial-scale=1.0">
+        <title>Project 2</title>
+    <style>
+        label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input, textarea {
+			display: block;
+			margin-bottom: 20px;
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+        .captchaContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+			margin-bottom: 20px;
+		}
+		.captcha-refresh {
+			padding: 10px;
+			background-color: #ccc;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-left: 10px;
+		}
+        .captchatext{
+			display: block;
+			margin-bottom: 20px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 25px;
+			width: 10%;
+			box-sizing: border-box;
+            text-decoration:line-through;
+		}
+    </style>
+</head>
+<body>
+    <h2>Contact Form</h2>
+    <form action="process_form.php" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea><br><br>
+
+        <div class="captchaContainer">
+            <label for="captcha">Enter the code:</label>
+            <input type="text" id="captchaInput" required>
+            <span id="captchaText" class="captchatext"></span>
+            <button type="button" onclick="refreshCaptcha()" class="captcha-refresh">Refresh</button>
+        </div><br>
+
+        <input type="submit" value="Submit" onclick="validateCaptcha(event)">
+    </form>
+
+    <script>
+        function generateRandomCaptcha(length) {
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var captcha = '';
+            for (var i = 0; i < length; i++) {
+                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return captcha;
+        }
+
+        function refreshCaptcha() {
+            var captchaText = document.getElementById("captchaText");
+            var captchaInput = document.getElementById("captchaInput");
+            var captcha = generateRandomCaptcha(6);//captcha of 6 characters
+            captchaText.textContent = captcha;
+            captchaInput.value = '';
+        }
+
+        function validateCaptcha(event) {
+            var captchaText = document.getElementById("captchaText").textContent;
+            var captchaInput = document.getElementById("captchaInput").value;
+            
+            if (captchaText !== captchaInput) {
+                event.preventDefault(); // Prevent form submission
+                alert("Invalid CAPTCHA. Please try again.");
+                refreshCaptcha();
+            }
+        }
+    </script>
+</body>
+</html>
